@@ -96,7 +96,7 @@
         $('#btn_start').click(function (e) {
             access_token = $('#txtToken').val();
             if (access_token == '' || postID == '') return;
-            listPostID = $('#txtPostID').val().split("|")
+            listPostID = $('#txtPostID').val().split("|");
             for (i = 0; i < listPostID.length; i++) {
                 postID = listPostID[i];
                 //get Page
