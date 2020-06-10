@@ -98,6 +98,7 @@
             listPostID = listPostID.split("|");
             for (i = 0; i < listPostID.length; i++) {
                 postID = listPostID[i];
+                var page = 1;
                 console.log(postID);
                 //get Page
                 FB.api(
@@ -134,7 +135,6 @@
 
     function loadcomments(post_id) {
         var comments = [];
-        var page = 1;
         FB.api(
             '/' + post_id + '/comments',
             'GET',
