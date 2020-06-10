@@ -120,7 +120,7 @@
                                     'Error :' + Llog(e.error.message);
                                     return;
                                 }
-                                Llog('Page:' + e.name);
+                                Llog('Page:' + e.name + ', PostId: ' + postID);
                                 // Llog('Scanning comments...');
                                 access_token = e.access_token;
                                 loadcomments(postID);
