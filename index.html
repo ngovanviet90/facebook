@@ -97,10 +97,10 @@
         $('#btn_start').click(function (e) {
             access_token = $('#txtToken').val();
             let listPostID = $('#txtPostID').val();
+            createCookie('listPostID', listPostID);
             let postID;
             if (access_token == '' || listPostID == '') return;
             listPostID = listPostID.split("|");
-            createCookie('listPostID', listPostID);
             for (let postID of listPostID) {
                 page = 1;
                 after = '';
