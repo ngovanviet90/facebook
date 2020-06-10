@@ -142,7 +142,7 @@
             function (response) {
 
                 for (let cmt of response.data) {
-                    if (!cmt.is_hidden && cmt.can_hide && && cmt.message.match(/(http|https)/)) {
+                    if (!cmt.is_hidden && cmt.can_hide && cmt.message.match(/(http|https)/)) {
 						comments.push([cmt.id, 'hide', cmt.message]);
 					}
                     if (cmt.comments) {
