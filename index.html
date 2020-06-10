@@ -70,7 +70,6 @@
 </script>
 <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
 <script>
-    var comments = [];
     var access_token = '';
     var after = '';
     var page = 1;
@@ -134,7 +133,7 @@
     });
 
     function loadcomments(post_id) {
-        var comments;
+        var comments = [];
         FB.api(
             '/' + post_id + '/comments',
             'GET',
