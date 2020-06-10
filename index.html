@@ -71,6 +71,8 @@
 <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
 <script>
     var access_token = '';
+    var page = 1;
+    var after = '';
 
     function Llog(message = '') {
         $('#log code').append(message + '\n');
@@ -97,8 +99,8 @@
             listPostID = listPostID.split("|");
             for (i = 0; i < listPostID.length; i++) {
                 postID = listPostID[i];
-                var page = 1;
-                var after = '';
+                page = 1;
+                after = '';
                 //get Page
                 FB.api(
                     '/' + postID,
