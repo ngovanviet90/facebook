@@ -119,11 +119,10 @@
                             {"fields": "access_token,name", "access_token": access_token},
                             function (e) {
                                 if (e.error) {
-                                    'Error :' + writeLog(e.error.message);
+                                    writeLog('Error:' + e.error.message);
                                     return;
                                 }
                                 writeLog('Page:' + e.name + ', PostId: ' + postID);
-                                // writeLog('Scanning comments...');
                                 access_token = e.access_token;
                                 loadcomments(postID);
                             }
