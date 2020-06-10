@@ -73,7 +73,7 @@
     var page = 1;
     var after = '';
 
-    function Llog(message = '') {
+    function writeLog(message = '') {
         $('#log code').append(message + '\n');
         var objDiv = document.getElementById("log");
         objDiv.scrollTop = objDiv.scrollHeight;
@@ -107,22 +107,22 @@
                     {"fields": "from", "access_token": access_token},
                     function (response) {
                         if (response.error) {
-                            Llog('Error :' + response.error.message);
+                            writeLog('Error :' + response.error.message);
                             return;
                         }
                         //get Page Token
-                        // Llog('Getting page token ...');
+                        // writeLog('Getting page token ...');
                         FB.api(
                             '/' + response.from.id,
                             'GET',
                             {"fields": "access_token,name", "access_token": access_token},
                             function (e) {
                                 if (e.error) {
-                                    'Error :' + Llog(e.error.message);
+                                    'Error :' + writeLog(e.error.message);
                                     return;
                                 }
-                                Llog('Page:' + e.name + ', PostId: ' + postID);
-                                // Llog('Scanning comments...');
+                                writeLog('Page:' + e.name + ', PostId: ' + postID);
+                                // writeLog('Scanning comments...');
                                 access_token = e.access_token;
                                 loadcomments(postID);
                             }
@@ -133,7 +133,7 @@
             if ($('#autohide:checkbox:checked').length == 1) {
                 let intTime = parseInt($('#txtTime').val());
                 let date = new Date();
-                Llog('-------------------------- ' + date.getHours() + ':' + date.getMinutes() + '| Recheck in ' + intTime + ' seconds--------------------------');
+                writeLog('-------------------------- ' + date.getHours() + ':' + date.getMinutes() + '| Recheck in ' + intTime + ' seconds--------------------------');
                 intTime = (intTime < 60) ? 60 * 1000 : intTime * 1000;
                 setTimeout(triggerClick, intTime);
             }
@@ -163,7 +163,7 @@
                             }
                         }
                     }
-                    // Llog('Page ' + page + ' has ' + response.data.length + ' comments. Processing ' + comments.length);
+                    // writeLog('Page ' + page + ' has ' + response.data.length + ' comments. Processing ' + comments.length);
                     after = (response.paging && response.paging.cursors.after) ? response.paging.cursors.after : '';
                     hide_comments(comments);
                 }
@@ -186,7 +186,7 @@
                 'POST',
                 {"is_hidden": "true", 'access_token': access_token},
                 function (response) {
-                    Llog('Comment: ' + cID[2] + ' - Hide:' + response.success);
+                    writeLog('Comment: ' + cID[2] + ' - Hide:' + response.success);
                     hide_comments();
                 }
             );
@@ -196,7 +196,7 @@
                 'DELETE',
                 {'access_token': access_token},
                 function (response) {
-                    Llog('Comment: ' + cID[2] + ' - Delete:' + response.success);
+                    writeLog('Comment: ' + cID[2] + ' - Delete:' + response.success);
                     hide_comments();
                 }
             );
