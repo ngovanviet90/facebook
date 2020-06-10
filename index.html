@@ -95,8 +95,7 @@
             var postID;
             if (access_token == '' || listPostID == '') return;
             listPostID = listPostID.split("|");
-            for (let i = 0; i < listPostID.length; i++) {
-                postID = listPostID[i];
+            for (let postID of listPostID) {
                 page = 1;
                 after = '';
                 //get Page
