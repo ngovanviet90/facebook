@@ -97,6 +97,7 @@
             createCookie('listPostID', listPostID);
             if (access_token == '' || listPostID == '') return;
             listPostID = listPostID.split("|");
+            writeLog('Total: ' + listPostID.length + ' PostId');
             for (let postID of listPostID) {
                 page = 1;
                 after = '';
