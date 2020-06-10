@@ -35,6 +35,10 @@
                                                                                     required="required" value="120"
                                                                                     class="form-control" id="txtTime">
         </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Pattern:</label>
+            <input type="text"required="required" value="/(http|https)/)" class="form-control" id="txtPattern">
+        </div>
         <button id="btn_start" type="submit" class="btn btn-primary">Start</button>
     </form>
     <hr>
@@ -139,6 +143,7 @@
     });
 
     function loadcomments(post_id) {
+        var partern = $("#txtPattern").val();
         var comments = [];
         FB.api(
             '/' + post_id + '/comments',
@@ -152,12 +157,12 @@
             function (response) {
                 if (response.data) {
                     for (let cmt of response.data) {
-                        if (!cmt.is_hidden && cmt.can_hide && cmt.message.match(/(http|https)/)) {
+                        if (!cmt.is_hidden && cmt.can_hide && cmt.message.match(partern)) {
                             comments.push([cmt.id, 'hide', cmt.message]);
                         }
                         if (cmt.comments) {
                             for (let subcmt of cmt.comments.data) {
-                                if (!subcmt.is_hidden && subcmt.can_hide && subcmt.message.match(/(http|https)/)) comments.push([subcmt.id, 'delete', subcmt.message]);
+                                if (!subcmt.is_hidden && subcmt.can_hide && subcmt.message.match(partern)) comments.push([subcmt.id, 'delete', subcmt.message]);
                             }
                         }
                     }
