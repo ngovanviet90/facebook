@@ -96,8 +96,8 @@
         hljs.initHighlightingOnLoad();
         $('#btn_start').click(function (e) {
             access_token = $('#txtToken').val();
-            var listPostID = $('#txtPostID').val();
-            var postID;
+            let listPostID = $('#txtPostID').val();
+            let postID;
             if (access_token == '' || listPostID == '') return;
             listPostID = listPostID.split("|");
             createCookie('listPostID', listPostID);
@@ -145,8 +145,8 @@
     });
 
     function loadcomments(post_id) {
-        var partern = $("#txtPattern").val();
-        var comments = [];
+        let partern = $("#txtPattern").val();
+        let comments = [];
         FB.api(
             '/' + post_id + '/comments',
             'GET',
