@@ -95,7 +95,6 @@
             access_token = $('#txtToken').val();
             let listPostID = $('#txtPostID').val();
             createCookie('listPostID', listPostID);
-            let postID;
             if (access_token == '' || listPostID == '') return;
             listPostID = listPostID.split("|");
             for (let postID of listPostID) {
