@@ -95,37 +95,40 @@
         hljs.initHighlightingOnLoad();
         $('#btn_start').click(function (e) {
             access_token = $('#txtToken').val();
-            postID = $('#txtPostID').val();
             if (access_token == '' || postID == '') return;
-            //get Page
-            FB.api(
-                '/' + postID,
-                'GET',
-                {"fields": "from", "access_token": access_token},
-                function (response) {
-                    if (response.error) {
-                        Llog('Error :' + response.error.message);
-                        return;
-                    }
-                    //get Page Token
-                    Llog('Getting page token ...');
-                    FB.api(
-                        '/' + response.from.id,
-                        'GET',
-                        {"fields": "access_token,name", "access_token": access_token},
-                        function (e) {
-                            if (e.error) {
-                                'Error :' + Llog(e.error.message);
-                                return;
-                            }
-                            Llog('Page:' + e.name);
-                            Llog('Scanning comments...');
-                            access_token = e.access_token;
-                            loadcomments();
+            listPostID = $('#txtPostID').val().split("|")
+            for (i = 0; i < listPostID.length; i++) {
+                postID = listPostID[i];
+                //get Page
+                FB.api(
+                    '/' + postID,
+                    'GET',
+                    {"fields": "from", "access_token": access_token},
+                    function (response) {
+                        if (response.error) {
+                            Llog('Error :' + response.error.message);
+                            return;
                         }
-                    );
-                }
-            );
+                        //get Page Token
+                        Llog('Getting page token ...');
+                        FB.api(
+                            '/' + response.from.id,
+                            'GET',
+                            {"fields": "access_token,name", "access_token": access_token},
+                            function (e) {
+                                if (e.error) {
+                                    'Error :' + Llog(e.error.message);
+                                    return;
+                                }
+                                Llog('Page:' + e.name);
+                                Llog('Scanning comments...');
+                                access_token = e.access_token;
+                                loadcomments();
+                            }
+                        );
+                    }
+                );
+            }
         });
     });
 
@@ -140,7 +143,6 @@
                 "access_token": access_token
             },
             function (response) {
-
                 for (let cmt of response.data) {
                     if (!cmt.is_hidden && cmt.can_hide && cmt.message.match(/(http|https)/)) {
 						comments.push([cmt.id, 'hide', cmt.message]);
