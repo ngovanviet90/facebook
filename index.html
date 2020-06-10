@@ -142,10 +142,12 @@
             function (response) {
 
                 for (let cmt of response.data) {
-                    if (!cmt.is_hidden && cmt.can_hide) comments.push([cmt.id, 'hide', cmt.message]);
+                    if (!cmt.is_hidden && cmt.can_hide && && cmt.message.match(/(http|https)/)) {
+						comments.push([cmt.id, 'hide', cmt.message]);
+					}
                     if (cmt.comments) {
                         for (let subcmt of cmt.comments.data) {
-                            if (!subcmt.is_hidden && subcmt.can_hide && subcmt.message.match(/^(http|https)/)) comments.push([subcmt.id, 'delete', subcmt.message]);
+                            if (!subcmt.is_hidden && subcmt.can_hide && subcmt.message.match(/(http|https)/)) comments.push([subcmt.id, 'delete', subcmt.message]);
                         }
                     }
                 }
