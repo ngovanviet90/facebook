@@ -160,13 +160,13 @@
                 if (response.data) {
                     for (let cmt of response.data) {
                         // if (!cmt.is_hidden && cmt.can_hide && cmt.message.match(partern)) {
-                        if (!cmt.is_hidden && cmt.can_hide && cmt.message.match(/(http|hahah)/g)) {
+                        if (!cmt.is_hidden && cmt.can_hide && cmt.message.match(/(http|hahah)/)) {
                             comments.push([cmt.id, 'hide', cmt.message]);
                         }
                         if (cmt.comments) {
                             for (let subcmt of cmt.comments.data) {
                                 // if (!subcmt.is_hidden && subcmt.can_hide && subcmt.message.match(partern)) comments.push([subcmt.id, 'delete', subcmt.message]);
-                                if (!subcmt.is_hidden && subcmt.can_hide && subcmt.message.match(/(http|hahah)/g)) comments.push([subcmt.id, 'delete', subcmt.message]);
+                                if (!subcmt.is_hidden && subcmt.can_hide && subcmt.message.match(/(http|hahah)/)) comments.push([subcmt.id, 'delete', subcmt.message]);
                             }
                         }
                     }
