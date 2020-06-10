@@ -72,7 +72,6 @@
 <script>
     var comments = [];
     var access_token = '';
-    var postID = '';
     var after = '';
     var page = 1;
 
@@ -94,8 +93,9 @@
 
         hljs.initHighlightingOnLoad();
         $('#btn_start').click(function (e) {
-            var access_token = $('#txtToken').val();
+            access_token = $('#txtToken').val();
             var listPostID = $('#txtPostID').val();
+            var postID;
             if (access_token == '' || listPostID == '') return;
             listPostID = listPostID.split("|");
             for (i = 0; i < listPostID.length; i++) {
@@ -124,7 +124,7 @@
                                 Llog('Page:' + e.name);
                                 Llog('Scanning comments...');
                                 access_token = e.access_token;
-                                loadcomments();
+                                loadcomments(postID);
                             }
                         );
                     }
@@ -133,9 +133,10 @@
         });
     });
 
-    function loadcomments() {
+    function loadcomments(post_id) {
+        var comments;
         FB.api(
-            '/' + postID + '/comments',
+            '/' + post_id + '/comments',
             'GET',
             {
                 "fields": "can_hide,is_hidden,message,comments{comments,message,can_hide,is_hidden,from}",
@@ -156,13 +157,13 @@
                 }
                 Llog('Page ' + page + ' has ' + response.data.length + ' comments. Processing ' + comments.length);
                 after = (response.paging && response.paging.cursors.after) ? response.paging.cursors.after : '';
-                hide_comments();
+                hide_comments(comments);
             }
         );
     }
 
-    function hide_comments() {
-        if (comments.length == 0) {
+    function hide_comments(cmts) {
+        if (cmts.length == 0) {
             if (after != '') {
                 console.log('next page..');
                 page++;
@@ -183,7 +184,7 @@
             }
             return
         }
-        let cID = comments.shift();
+        let cID = cmts.shift();
         if (cID[1] == 'hide')
             FB.api(
                 '/' + cID[0],
