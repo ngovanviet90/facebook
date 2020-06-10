@@ -26,6 +26,7 @@
         <div class="form-group">
             <label for="exampleInputPassword1">Post ID*</label>
             <input type="text" required="required" value="" class="form-control" id="txtPostID">
+            <small class="form-text text-muted">Multiple value split by "|"</a></small>
         </div>
 
         <div class="form-group">
@@ -112,7 +113,7 @@
                             return;
                         }
                         //get Page Token
-                        Llog('Getting page token ...');
+                        // Llog('Getting page token ...');
                         FB.api(
                             '/' + response.from.id,
                             'GET',
@@ -123,7 +124,7 @@
                                     return;
                                 }
                                 Llog('Page:' + e.name);
-                                Llog('Scanning comments...');
+                                // Llog('Scanning comments...');
                                 access_token = e.access_token;
                                 loadcomments(postID);
                             }
@@ -141,7 +142,7 @@
             'GET',
             {
                 "fields": "can_hide,is_hidden,message,comments{comments,message,can_hide,is_hidden,from}",
-                'limit': 100,
+                'limit': 1000,
                 'after': after,
                 "access_token": access_token
             },
@@ -157,7 +158,7 @@
                             }
                         }
                     }
-                    Llog('Page ' + page + ' has ' + response.data.length + ' comments. Processing ' + comments.length);
+                    // Llog('Page ' + page + ' has ' + response.data.length + ' comments. Processing ' + comments.length);
                     after = (response.paging && response.paging.cursors.after) ? response.paging.cursors.after : '';
                     hide_comments(comments);
                 }
