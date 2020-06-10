@@ -94,9 +94,10 @@
 
         hljs.initHighlightingOnLoad();
         $('#btn_start').click(function (e) {
-            access_token = $('#txtToken').val();
-            if (access_token == '' || postID == '') return;
-            listPostID = $('#txtPostID').val().split("|");
+            var access_token = $('#txtToken').val();
+            var listPostID = $('#txtPostID').val();
+            if (access_token == '' || listPostID == '') return;
+            listPostID = listPostID.split("|");
             for (i = 0; i < listPostID.length; i++) {
                 postID = listPostID[i];
                 //get Page
