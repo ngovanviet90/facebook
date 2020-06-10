@@ -91,6 +91,7 @@
             if ($(this).val() != '') createCookie('accessToken', $(this).val());
         });
         $('#txtToken').val(getCookie('accessToken'));
+        $('#txtPostID').val(getCookie('listPostID'));
 
         hljs.initHighlightingOnLoad();
         $('#btn_start').click(function (e) {
@@ -99,6 +100,7 @@
             var postID;
             if (access_token == '' || listPostID == '') return;
             listPostID = listPostID.split("|");
+            createCookie('listPostID', listPostID);
             for (let postID of listPostID) {
                 page = 1;
                 after = '';
