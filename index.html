@@ -128,6 +128,13 @@
                     }
                 );
             }
+            if ($('#autohide:checkbox:checked').length == 1) {
+                let intTime = parseInt($('#txtTime').val());
+                let date = new Date();
+                Llog(date.getHours() + ':' + date.getMinutes() + '| Recheck in ' + intTime + ' seconds...')
+                intTime = (intTime < 60) ? 60 * 1000 : intTime * 1000;
+                setTimeout(triggerClick, intTime);
+            }
         });
     });
 
@@ -162,28 +169,11 @@
         );
     }
 
-    function hide_comments(cmts) {
-        if (cmts.length == 0) {
-            if (after != '') {
-                console.log('next page..');
-                page++;
-                loadcomments();
-                return;
-            } else
-                Llog('done');
-            //reset
-            page = 1;
-            after = '';
+    function triggerClick() {
+        $('#btn_start').trigger('click');
+    }
 
-            if ($('#autohide:checkbox:checked').length == 1) {
-                let intTime = parseInt($('#txtTime').val());
-                let date = new Date();
-                Llog(date.getHours() + ':' + date.getMinutes() + '| Recheck in ' + intTime + ' seconds...')
-                intTime = (intTime < 60) ? 60 * 1000 : intTime * 1000;
-                setTimeout(loadcomments, intTime);
-            }
-            return
-        }
+    function hide_comments(cmts) {
         let cID = cmts.shift();
         if (cID[1] == 'hide')
             FB.api(
