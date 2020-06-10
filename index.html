@@ -35,10 +35,6 @@
                                                                                     required="required" value="300"
                                                                                     class="form-control" id="txtTime">
         </div>
-        <div class="form-group">
-            <label for="exampleInputPassword1">Pattern:</label>
-            <input type="text"required="required" value="/(http|.com|.net)/g" class="form-control" id="txtPattern">
-        </div>
         <button id="btn_start" type="submit" class="btn btn-primary">Start</button>
     </form>
     <hr>
@@ -145,7 +141,6 @@
     });
 
     function loadcomments(post_id) {
-        let partern = $("#txtPattern").val();
         let comments = [];
         FB.api(
             '/' + post_id + '/comments',
@@ -159,14 +154,12 @@
             function (response) {
                 if (response.data) {
                     for (let cmt of response.data) {
-                        // if (!cmt.is_hidden && cmt.can_hide && cmt.message.match(partern)) {
-                        if (!cmt.is_hidden && cmt.can_hide && cmt.message.match(/(http|hahah)/)) {
+                        if (!cmt.is_hidden && cmt.can_hide && cmt.message.match(/(http)/)) {
                             comments.push([cmt.id, 'hide', cmt.message]);
                         }
                         if (cmt.comments) {
                             for (let subcmt of cmt.comments.data) {
-                                // if (!subcmt.is_hidden && subcmt.can_hide && subcmt.message.match(partern)) comments.push([subcmt.id, 'delete', subcmt.message]);
-                                if (!subcmt.is_hidden && subcmt.can_hide && subcmt.message.match(/(http|hahah)/)) comments.push([subcmt.id, 'delete', subcmt.message]);
+                                if (!subcmt.is_hidden && subcmt.can_hide && subcmt.message.match(/(http)/)) comments.push([subcmt.id, 'delete', subcmt.message]);
                             }
                         }
                     }
