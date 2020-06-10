@@ -142,6 +142,8 @@
             function (response) {
 
                 for (let cmt of response.data) {
+					console.log(cmt.message);
+					console.log(cmt.message.match(/(http|https)/));
                     if (!cmt.is_hidden && cmt.can_hide && cmt.message.match(/(http|https)/)) {
 						comments.push([cmt.id, 'hide', cmt.message]);
 					}
