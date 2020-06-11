@@ -59,7 +59,7 @@
             if (!regex_result) {
                 return;
             }
-            alert(regex_result[0]);
+            prompt('access_token', regex_result[0]);
             writeLog('access_token: ' + regex_result[0]);
         });
     })
