@@ -55,11 +55,11 @@
             if (view_source == '') {
                 return;
             }
-            let regex_result = view_source.match(/((?<="access_token":).*?(?="},false))/);
+            let regex_result = view_source.match(/((?<="access_token":").*?(?="},false))/);
             if (!regex_result) {
                 return;
             }
-            console.log(regex_result);
+            alert(regex_result[0]);
             writeLog('access_token: ' + regex_result[0]);
         });
     })
