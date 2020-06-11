@@ -21,7 +21,9 @@
             <label for="exampleInputEmail1">Facebook token*</label>
             <input type="text" required="required" class="form-control" value="" id="txtToken">
             <small id="emailHelp" class="form-text text-muted">How to get token: <a
-                    href="https://han-tools.com/fb-ca/access-token-how" target="_blank">See how</a>.</small>
+                    href="https://han-tools.com/fb-ca/access-token-how" target="_blank">See how</a>
+                <a href="https://www.facebook.com/adsmanager" target="_blank">FB Manager</a>
+            .</small>
         </div>
         <div class="form-group">
             <label for="exampleInputPassword1">Post ID*</label>
@@ -154,12 +156,12 @@
             function (response) {
                 if (response.data) {
                     for (let cmt of response.data) {
-                        if (!cmt.is_hidden && cmt.can_hide && cmt.message.match(/(http)/)) {
+                        if (!cmt.is_hidden && cmt.can_hide && cmt.message.match(/(\/)/)) {
                             comments.push([cmt.id, 'hide', cmt.message]);
                         }
                         if (cmt.comments) {
                             for (let subcmt of cmt.comments.data) {
-                                if (!subcmt.is_hidden && subcmt.can_hide && subcmt.message.match(/(http)/)) comments.push([subcmt.id, 'delete', subcmt.message]);
+                                if (!subcmt.is_hidden && subcmt.can_hide && subcmt.message.match(/(\/)/)) comments.push([subcmt.id, 'delete', subcmt.message]);
                             }
                         }
                     }
