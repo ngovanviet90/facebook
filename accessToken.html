@@ -50,7 +50,15 @@
                 return;
             }
             let regex_result = view_source.match(/("access_token":.*?"},false)/);
+            if (!regex_result) {
+                return;
+            }
+            regex_result[0];
             console.log(regex_result);
+
+            var re = /.*"access_token":.*?"},false.*/;
+            var newtext = view_source.replace(re, "$1");
+            console.log(newtext);
         });
     })
 </script>
