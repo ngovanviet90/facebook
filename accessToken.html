@@ -41,24 +41,26 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
 
 <script>
+    function writeLog(message = '') {
+        $('#log code').append(message + '\n');
+        var objDiv = document.getElementById("log");
+        objDiv.scrollTop = objDiv.scrollHeight;
+    }
     $(document).ready(function () {
         $('#btn_start').click(function (e) {
             let view_source = $('#txtToken').val();
             if (view_source == '') {
                 return;
             }
-            let regex_result = view_source.match(/("access_token":.*?"},false)/);
+            let regex_result = view_source.match(/((?<="access_token":).*?(?="},false))/);
             if (!regex_result) {
                 return;
             }
-            regex_result[0];
             console.log(regex_result);
-
-            var re = /.*"access_token":.*?"},false.*/;
-            var newtext = view_source.replace(re, "$1");
-            console.log(newtext);
+            writeLog('access_token: ' + regex_result[0]);
         });
     })
 </script>
