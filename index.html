@@ -74,6 +74,7 @@
     var access_token = '';
     var page = 1;
     var after = '';
+    var pattern = "/(http(s)?:\\/\\/.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)/";
 
     function writeLog(message = '') {
         $('#log code').append(message + '\n');
@@ -149,23 +150,24 @@
             'GET',
             {
                 "fields": "can_hide,is_hidden,message,comments{comments,message,can_hide,is_hidden,from}",
-                'limit': 500,
+                'limit': 1000,
                 'after': after,
                 "access_token": access_token
             },
             function (response) {
                 if (response.data) {
                     for (let cmt of response.data) {
-                        if (!cmt.is_hidden && cmt.can_hide && cmt.message.match(/(\/)/)) {
+                        console.log("PostID: " + post_id + ", Msg: " + cmt.message);
+                        if (!cmt.is_hidden && cmt.can_hide && cmt.message.match(pattern)) {
                             comments.push([cmt.id, 'hide', cmt.message]);
                         }
                         if (cmt.comments) {
                             for (let subcmt of cmt.comments.data) {
-                                if (!subcmt.is_hidden && subcmt.can_hide && subcmt.message.match(/(\/)/)) comments.push([subcmt.id, 'delete', subcmt.message]);
+                                console.log("PostID: " + post_id + ", Msg: " + subcmt.message);
+                                if (!subcmt.is_hidden && subcmt.can_hide && subcmt.message.match(pattern)) comments.push([subcmt.id, 'delete', subcmt.message]);
                             }
                         }
                     }
-                    // writeLog('Page ' + page + ' has ' + response.data.length + ' comments. Processing ' + comments.length);
                     after = (response.paging && response.paging.cursors.after) ? response.paging.cursors.after : '';
                     hide_comments(comments);
                 }
