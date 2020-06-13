@@ -114,25 +114,25 @@
                         {"fields": "from", "access_token": access_token},
                         function (response) {
                             if (response.error) {
-                                writeLog('PostID: ' + postID + ', Error :' + response.error.message);
-                                return;
-                            }
-                            //get Page Token
-                            // writeLog('Getting page token ...');
-                            FB.api(
-                                '/' + response.from.id,
-                                'GET',
-                                {"fields": "access_token,name", "access_token": access_token},
-                                function (e) {
-                                    if (e.error) {
-                                        writeLog('Error:' + e.error.message);
-                                        return;
+                                writeLog('PostID : ' + postID + ', Error :' + response.error.message);
+                            } else {
+                                //get Page Token
+                                // writeLog('Getting page token ...');
+                                FB.api(
+                                    '/' + response.from.id,
+                                    'GET',
+                                    {"fields": "access_token,name", "access_token": access_token},
+                                    function (e) {
+                                        if (e.error) {
+                                            writeLog('Error: ' + e.error.message);
+                                        } else {
+                                            writeLog('Page: ' + e.name + ', PostId: ' + postID);
+                                            access_token = e.access_token;
+                                            load_comments(postID);
+                                        }
                                     }
-                                    writeLog('Page:' + e.name + ', PostId: ' + postID);
-                                    access_token = e.access_token;
-                                    load_comments(postID);
-                                }
-                            );
+                                );
+                            }
                         }
                     );
                 }
