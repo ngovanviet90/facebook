@@ -65,9 +65,6 @@
             xfbml: true,
             version: 'v6.0'
         });
-        $(document).ready(function () {
-            // loadcomments();
-        })
     };
 </script>
 <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
@@ -83,96 +80,109 @@
     }
 
     $(function () {
-        $('form').submit(function (e) {
-            e.preventDefault()
-        });
+        try {
+            $('form').submit(function (e) {
+                e.preventDefault()
+            });
 
-        $('#txtToken').change(function () {
-            if ($(this).val() != '') createCookie('accessToken', $(this).val());
-        });
-        $('#txtToken').val(getCookie('accessToken'));
-        $('#txtPostID').val(getCookie('listPostID'));
+            $('#txtToken').change(function () {
+                if ($(this).val() != '') createCookie('accessToken', $(this).val());
+            });
+            $('#txtToken').val(getCookie('accessToken'));
+            $('#txtPostID').val(getCookie('listPostID'));
 
-        hljs.initHighlightingOnLoad();
-        $('#btn_start').click(function (e) {
-            access_token = $('#txtToken').val();
-            let listPostID = $('#txtPostID').val();
-            createCookie('listPostID', listPostID);
-            if (access_token == '' || listPostID == '') return;
-            listPostID = listPostID.split("|");
-            writeLog('Total: ' + listPostID.length + ' PostId');
-            for (let postID of listPostID) {
-                page = 1;
-                after = '';
-                //get Page
-                FB.api(
-                    '/' + postID,
-                    'GET',
-                    {"fields": "from", "access_token": access_token},
-                    function (response) {
-                        if (response.error) {
-                            writeLog('PostID: ' + postID + ', Error :' + response.error.message);
-                            return;
-                        }
-                        //get Page Token
-                        // writeLog('Getting page token ...');
-                        FB.api(
-                            '/' + response.from.id,
-                            'GET',
-                            {"fields": "access_token,name", "access_token": access_token},
-                            function (e) {
-                                if (e.error) {
-                                    writeLog('Error:' + e.error.message);
-                                    return;
-                                }
-                                writeLog('Page:' + e.name + ', PostId: ' + postID);
-                                access_token = e.access_token;
-                                loadcomments(postID);
+            hljs.initHighlightingOnLoad();
+        } catch(err) {
+            writeLog('Error:' + err.message);
+        }
+
+        $("#btn_start").on("click", function(){
+            try {
+                access_token = $('#txtToken').val();
+                let listPostID = $('#txtPostID').val();
+                createCookie('listPostID', listPostID);
+                if (access_token == '' || listPostID == '') return;
+                listPostID = listPostID.split("|");
+                writeLog('Total: ' + listPostID.length + ' PostId');
+                for (let postID of listPostID) {
+                    page = 1;
+                    after = '';
+                    //get Page
+                    FB.api(
+                        '/' + postID,
+                        'GET',
+                        {"fields": "from", "access_token": access_token},
+                        function (response) {
+                            if (response.error) {
+                                writeLog('PostID: ' + postID + ', Error :' + response.error.message);
+                                return;
                             }
-                        );
-                    }
-                );
-            }
-            if ($('#autohide:checkbox:checked').length == 1) {
-                let intTime = parseInt($('#txtTime').val());
-                let date = new Date();
-                writeLog('-------------------------- ' + date.getHours() + ':' + date.getMinutes() + '| Recheck in ' + intTime + ' seconds--------------------------');
-                intTime = (intTime < 60) ? 60 * 1000 : intTime * 1000;
-                setTimeout(triggerClick, intTime);
+                            //get Page Token
+                            // writeLog('Getting page token ...');
+                            FB.api(
+                                '/' + response.from.id,
+                                'GET',
+                                {"fields": "access_token,name", "access_token": access_token},
+                                function (e) {
+                                    if (e.error) {
+                                        writeLog('Error:' + e.error.message);
+                                        return;
+                                    }
+                                    writeLog('Page:' + e.name + ', PostId: ' + postID);
+                                    access_token = e.access_token;
+                                    load_comments(postID);
+                                }
+                            );
+                        }
+                    );
+                }
+                if ($('#autohide:checkbox:checked').length == 1) {
+                    let intTime = parseInt($('#txtTime').val());
+                    let date = new Date();
+                    writeLog('-------------------------- ' + date.getHours() + ':' + date.getMinutes() + '| Recheck in ' + intTime + ' seconds--------------------------');
+                    intTime = (intTime < 60) ? 60 * 1000 : intTime * 1000;
+                    setTimeout(triggerClick, intTime);
+                }
+            } catch(err) {
+                writeLog('Error:' + err.message);
             }
         });
     });
 
-    function loadcomments(post_id) {
-        let comments = [];
-        FB.api(
-            '/' + post_id + '/comments',
-            'GET',
-            {
-                "fields": "can_hide,is_hidden,message,comments{comments,message,can_hide,is_hidden,from}",
-                'limit': 1000,
-                'after': after,
-                "access_token": access_token
-            },
-            function (response) {
-                if (response.data) {
-                    for (let cmt of response.data) {
-                        console.log("PostID: " + post_id + ", Msg: " + cmt.message);
-                        if (!cmt.is_hidden && cmt.can_hide && cmt.message.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)) {
-                            comments.push([cmt.id, 'hide', cmt.message]);
-                        }
-                        if (cmt.comments) {
-                            for (let subcmt of cmt.comments.data) {
-                                console.log("PostID: " + post_id + ", Msg: " + subcmt.message);
-                                if (!subcmt.is_hidden && subcmt.can_hide && subcmt.message.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)) comments.push([subcmt.id, 'delete', subcmt.message]);
+    function load_comments(post_id) {
+        try {
+            let comments = [];
+            FB.api(
+                '/' + post_id + '/comments',
+                'GET',
+                {
+                    "fields": "can_hide,is_hidden,message,comments{comments,message,can_hide,is_hidden,from}",
+                    'limit': 1000,
+                    'after': after,
+                    "access_token": access_token
+                },
+                function (response) {
+                    if (response.data) {
+                        for (let cmt of response.data) {
+                            console.log("PostID: " + post_id + ", Msg: " + cmt.message);
+                            if (!cmt.is_hidden && cmt.can_hide && cmt.message.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)) {
+                                comments.push([cmt.id, 'hide', cmt.message]);
+                            }
+                            if (cmt.comments) {
+                                for (let subcmt of cmt.comments.data) {
+                                    console.log("PostID: " + post_id + ", Msg: " + subcmt.message);
+                                    if (!subcmt.is_hidden && subcmt.can_hide && subcmt.message.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)) comments.push([subcmt.id, 'delete', subcmt.message]);
+                                }
                             }
                         }
+                        after = (response.paging && response.paging.cursors.after) ? response.paging.cursors.after : '';
+                        hide_comments(comments);
                     }
-                    after = (response.paging && response.paging.cursors.after) ? response.paging.cursors.after : '';
-                    hide_comments(comments);
                 }
-            }
-        );
+            );
+        } catch(err) {
+            writeLog('Error Load Comments:' + err.message);
+        }
     }
 
     function triggerClick() {
@@ -180,55 +190,67 @@
     }
 
     function hide_comments(cmts) {
-        if (typeof cmts == undefined || typeof cmts.length == undefined || cmts.length == 0) {
-            return;
+        try {
+            if (typeof cmts == undefined || typeof cmts.length == undefined || cmts.length == 0) {
+                return;
+            }
+            let cID = cmts.shift();
+            if (cID[1] == 'hide')
+                FB.api(
+                    '/' + cID[0],
+                    'POST',
+                    {"is_hidden": "true", 'access_token': access_token},
+                    function (response) {
+                        writeLog('Comment: ' + cID[2] + ' - Hide:' + response.success);
+                        hide_comments();
+                    }
+                );
+            else
+                FB.api(
+                    '/' + cID[0],
+                    'DELETE',
+                    {'access_token': access_token},
+                    function (response) {
+                        writeLog('Comment: ' + cID[2] + ' - Delete:' + response.success);
+                        hide_comments();
+                    }
+                );
+        } catch(err) {
+            writeLog('Error Hide Comments:' + err.message);
         }
-        let cID = cmts.shift();
-        if (cID[1] == 'hide')
-            FB.api(
-                '/' + cID[0],
-                'POST',
-                {"is_hidden": "true", 'access_token': access_token},
-                function (response) {
-                    writeLog('Comment: ' + cID[2] + ' - Hide:' + response.success);
-                    hide_comments();
-                }
-            );
-        else
-            FB.api(
-                '/' + cID[0],
-                'DELETE',
-                {'access_token': access_token},
-                function (response) {
-                    writeLog('Comment: ' + cID[2] + ' - Delete:' + response.success);
-                    hide_comments();
-                }
-            );
     }
 
     function createCookie(name, value, days = 365) {
-        var expires;
-        if (days) {
-            var date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            expires = "; expires=" + date.toGMTString();
-        } else {
-            expires = "";
+        try {
+            let expires;
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toGMTString();
+            } else {
+                expires = "";
+            }
+            document.cookie = name + "=" + value + expires + "; path=/";
+        } catch(err) {
+            writeLog('Error Create Cookie:' + err.message);
         }
-        document.cookie = name + "=" + value + expires + "; path=/";
     }
 
     function getCookie(c_name) {
-        if (document.cookie.length > 0) {
-            c_start = document.cookie.indexOf(c_name + "=");
-            if (c_start != -1) {
-                c_start = c_start + c_name.length + 1;
-                c_end = document.cookie.indexOf(";", c_start);
-                if (c_end == -1) {
-                    c_end = document.cookie.length;
+        try {
+            if (document.cookie.length > 0) {
+                let c_start = document.cookie.indexOf(c_name + "=");
+                if (c_start != -1) {
+                    c_start = c_start + c_name.length + 1;
+                    let c_end = document.cookie.indexOf(";", c_start);
+                    if (c_end == -1) {
+                        c_end = document.cookie.length;
+                    }
+                    return unescape(document.cookie.substring(c_start, c_end));
                 }
-                return unescape(document.cookie.substring(c_start, c_end));
             }
+        } catch(err) {
+            writeLog('Error Get Cookie:' + err.message);
         }
         return "";
     }
