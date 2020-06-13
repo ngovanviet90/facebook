@@ -124,7 +124,7 @@
                                     {"fields": "access_token,name", "access_token": access_token},
                                     function (e) {
                                         if (e.error) {
-                                            writeLog('Error: ' + e.error.message);
+                                            writeLog('PostID : ' + postID + ', Error :' + e.error.message);
                                         } else {
                                             writeLog('Page: ' + e.name + ', PostId: ' + postID);
                                             access_token = e.access_token;
@@ -201,8 +201,11 @@
                     'POST',
                     {"is_hidden": "true", 'access_token': access_token},
                     function (response) {
-                        writeLog('Comment: ' + cID[2] + ' - Hide:' + response.success);
-                        hide_comments();
+                        if (response.error) {
+                            writeLog('PostID : ' + postID + ', Error :' + response.error.message);
+                        } else {
+                            writeLog('Comment: ' + cID[2] + ' - Hide:' + response.success);
+                        }
                     }
                 );
             else
@@ -211,8 +214,11 @@
                     'DELETE',
                     {'access_token': access_token},
                     function (response) {
-                        writeLog('Comment: ' + cID[2] + ' - Delete:' + response.success);
-                        hide_comments();
+                        if (response.error) {
+                            writeLog('PostID : ' + postID + ', Error :' + response.error.message);
+                        } else {
+                            writeLog('Comment: ' + cID[2] + ' - Delete:' + response.success);
+                        }
                     }
                 );
         } catch(err) {
