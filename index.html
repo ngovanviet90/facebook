@@ -93,7 +93,7 @@
 
             hljs.initHighlightingOnLoad();
         } catch(err) {
-            writeLog('Error:' + err.message);
+            writeLog('Error: ' + err.message);
         }
 
         $("#btn_start").on("click", function(){
@@ -144,7 +144,7 @@
                     setTimeout(triggerClick, intTime);
                 }
             } catch(err) {
-                writeLog('Error:' + err.message);
+                writeLog('Error: ' + err.message);
             }
         });
     });
@@ -181,7 +181,7 @@
                 }
             );
         } catch(err) {
-            writeLog('Error Load Comments:' + err.message);
+            writeLog('Error Load Comments: ' + err.message);
         }
     }
 
@@ -216,7 +216,7 @@
                     }
                 );
         } catch(err) {
-            writeLog('Error Hide Comments:' + err.message);
+            writeLog('Error Hide Comments: ' + err.message);
         }
     }
 
@@ -232,7 +232,7 @@
             }
             document.cookie = name + "=" + value + expires + "; path=/";
         } catch(err) {
-            writeLog('Error Create Cookie:' + err.message);
+            writeLog('Error Create Cookie: ' + err.message);
         }
     }
 
@@ -250,7 +250,7 @@
                 }
             }
         } catch(err) {
-            writeLog('Error Get Cookie:' + err.message);
+            writeLog('Error Get Cookie: ' + err.message);
         }
         return "";
     }
