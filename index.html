@@ -100,8 +100,11 @@
             try {
                 access_token = $('#txtToken').val();
                 let listPostID = $('#txtPostID').val();
+                if (access_token == '' || listPostID == '') {
+                    writeLog('access_token or list post id is empty.');
+                    return;
+                }
                 createCookie('listPostID', listPostID);
-                if (access_token == '' || listPostID == '') return;
                 listPostID = listPostID.split("|");
                 writeLog('Total: ' + listPostID.length + ' PostId');
                 for (let postID of listPostID) {
@@ -117,7 +120,6 @@
                                 writeLog('PostID : ' + postID + ', Error :' + response.error.message);
                             } else {
                                 //get Page Token
-                                // writeLog('Getting page token ...');
                                 FB.api(
                                     '/' + response.from.id,
                                     'GET',
