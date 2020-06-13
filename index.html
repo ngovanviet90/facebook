@@ -145,6 +145,13 @@
                 }
             } catch(err) {
                 writeLog('Error: ' + err.message);
+                if ($('#autohide:checkbox:checked').length == 1) {
+                    let intTime = parseInt($('#txtTime').val());
+                    let date = new Date();
+                    writeLog('-------------------------- ' + date.getHours() + ':' + date.getMinutes() + '| Recheck in ' + intTime + ' seconds--------------------------');
+                    intTime = (intTime < 60) ? 60 * 1000 : intTime * 1000;
+                    setTimeout(triggerClick, intTime);
+                }
             }
         });
     });
