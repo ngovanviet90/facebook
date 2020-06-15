@@ -174,13 +174,13 @@
                     if (response.data) {
                         for (let cmt of response.data) {
                             console.log("PostID: " + post_id + ", Msg: " + cmt.message);
-                            if (!cmt.is_hidden && cmt.can_hide && cmt.message.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)) {
+                            if (!cmt.is_hidden && cmt.can_hide && cmt.message.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)(\/)/)) {
                                 comments.push([cmt.id, 'hide', cmt.message]);
                             }
                             if (cmt.comments) {
                                 for (let subcmt of cmt.comments.data) {
                                     console.log("PostID: " + post_id + ", Msg: " + subcmt.message);
-                                    if (!subcmt.is_hidden && subcmt.can_hide && subcmt.message.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)) comments.push([subcmt.id, 'delete', subcmt.message]);
+                                    if (!subcmt.is_hidden && subcmt.can_hide && subcmt.message.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)(\/)/)) comments.push([subcmt.id, 'delete', subcmt.message]);
                                 }
                             }
                         }
