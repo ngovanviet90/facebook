@@ -166,7 +166,7 @@
                 'GET',
                 {
                     "fields": "can_hide,is_hidden,message,comments{comments,message,can_hide,is_hidden,from}",
-                    // 'limit': 999999,
+                    'limit': 999999,
                     'after': after,
                     "access_token": access_token
                 },
@@ -185,7 +185,7 @@
                             }
                         }
                         after = (response.paging && response.paging.cursors.after) ? response.paging.cursors.after : '';
-                        hide_comments(comments);
+                        hide_comments(comments, post_id);
                     }
                 }
             );
@@ -198,10 +198,22 @@
         $('#btn_start').trigger('click');
     }
 
-    function hide_comments(cmts) {
+    function hide_comments(cmts, post_id) {
         try {
             if (typeof cmts == undefined || typeof cmts.length == undefined || cmts.length == 0) {
                 return;
+            }
+            if(cmts.length == 0) {
+                if (after != '') {
+                    console.log('PostId: ' + post_id + ' next page...');
+                    page++;
+                    load_comments(post_id);
+                    return;
+                } else {
+                    //reset
+                    page = 1;
+                    after = '';
+                }
             }
             let cID = cmts.shift();
             if (cID[1] == 'hide')
