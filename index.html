@@ -187,6 +187,9 @@
                         after = (response.paging && response.paging.cursors.after) ? response.paging.cursors.after : '';
                         console.log('Post_id: ' + post_id + ', page: ' + page + ', after: ' + after);
                         hide_comments(comments, post_id);
+                    } else {
+                        page = 1;
+                        after = '';
                     }
                 }
             );
