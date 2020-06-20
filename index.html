@@ -166,7 +166,7 @@
                 'GET',
                 {
                     "fields": "can_hide,is_hidden,message,comments{comments,message,can_hide,is_hidden,from}",
-                    'limit': 1000,
+                    'limit': 3000,
                     'after': after,
                     "access_token": access_token
                 },
@@ -210,6 +210,7 @@
                     page++;
                     load_comments(post_id);
                 } else {
+                    console.log('ELSE: ' + cmts);
                     //reset
                     page = 1;
                     after = '';
