@@ -201,9 +201,6 @@
     function hide_comments(cmts, post_id) {
         try {
             if (typeof cmts == undefined || typeof cmts.length == undefined || cmts.length == 0) {
-                return;
-            }
-            if(cmts.length == 0) {
                 if (after != '') {
                     console.log('PostId: ' + post_id + ' next page...');
                     page++;
@@ -214,6 +211,7 @@
                     page = 1;
                     after = '';
                 }
+                return;
             }
             let cID = cmts.shift();
             if (cID[1] == 'hide')
