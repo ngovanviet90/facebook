@@ -206,41 +206,41 @@
                     console.log('PostId: ' + post_id + ' next page...');
                     page++;
                     load_comments(post_id);
-                    return;
                 } else {
                     //reset
                     page = 1;
                     after = '';
                 }
-                return;
+            } else {
+                let cID = cmts.shift();
+                if (cID[1] == 'hide') {
+                    FB.api(
+                        '/' + cID[0],
+                        'POST',
+                        {"is_hidden": "true", 'access_token': access_token},
+                        function (response) {
+                            if (response.error) {
+                                writeLog('PostID : ' + postID + ', Error :' + response.error.message);
+                            } else {
+                                writeLog('Comment: ' + cID[2] + ' - Hide:' + response.success);
+                            }
+                        }
+                    );
+                } else {
+                    FB.api(
+                        '/' + cID[0],
+                        'DELETE',
+                        {'access_token': access_token},
+                        function (response) {
+                            if (response.error) {
+                                writeLog('PostID : ' + postID + ', Error :' + response.error.message);
+                            } else {
+                                writeLog('Comment: ' + cID[2] + ' - Delete:' + response.success);
+                            }
+                        }
+                    );
+                }
             }
-            let cID = cmts.shift();
-            if (cID[1] == 'hide')
-                FB.api(
-                    '/' + cID[0],
-                    'POST',
-                    {"is_hidden": "true", 'access_token': access_token},
-                    function (response) {
-                        if (response.error) {
-                            writeLog('PostID : ' + postID + ', Error :' + response.error.message);
-                        } else {
-                            writeLog('Comment: ' + cID[2] + ' - Hide:' + response.success);
-                        }
-                    }
-                );
-            else
-                FB.api(
-                    '/' + cID[0],
-                    'DELETE',
-                    {'access_token': access_token},
-                    function (response) {
-                        if (response.error) {
-                            writeLog('PostID : ' + postID + ', Error :' + response.error.message);
-                        } else {
-                            writeLog('Comment: ' + cID[2] + ' - Delete:' + response.success);
-                        }
-                    }
-                );
         } catch(err) {
             writeLog('Error Hide Comments: ' + err.message);
         }
