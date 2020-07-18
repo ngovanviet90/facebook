@@ -123,7 +123,8 @@
                                 FB.api(
                                     '/' + response.from.id,
                                     'GET',
-                                    {"fields": "access_token,name", "access_token": access_token},
+                                    // {"fields": "access_token,name", "access_token": access_token},
+                                    {"fields": "", "access_token": access_token},
                                     function (e) {
                                         if (e.error) {
                                             writeLog('PostID : ' + postID + ', Error :' + e.error.message);
