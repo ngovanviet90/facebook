@@ -24,7 +24,7 @@
             <small id="emailHelp" class="form-text text-muted">How to get token: <a
                     href="https://han-tools.com/fb-ca/access-token-how" target="_blank">See how</a> |
                 <a href="./accessToken" target="_blank">Get AccessToken</a>
-            .</small>
+                .</small>
         </div>
         <div class="form-group">
             <label for="exampleInputPassword1">Post ID*</label>
@@ -70,6 +70,7 @@
 <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
 <script>
     var access_token = '';
+    var access_token_cmt = '';
     var page = 1;
     var after = '';
 
@@ -107,40 +108,44 @@
                 createCookie('listPostID', listPostID);
                 listPostID = listPostID.split("|");
                 writeLog('Total: ' + listPostID.length + ' PostId');
+                //get access_token
+                FB.api(
+                    '/me/accounts',
+                    'GET',
+                    {"fields": "access_token,name", "access_token": access_token},
+                    function (response) {
+                        if (response.error) {
+                            writeLog('PostID : ' + postID + ', Error :' + response.error.message);
+                        } else {
+                            if (response.data && response.data[0]) {
+                                access_token_cmt = response.data[0].access_token;
+                                writeLog('Get access_token success.');
+                            } else {
+                                writeLog('Error: Can\'t get access_token');
+                                return;
+                            }
+                        }
+                    }
+                );
                 for (let postID of listPostID) {
                     page = 1;
                     after = '';
-                    //get Page
+                    //get page info
                     FB.api(
                         '/' + postID,
                         'GET',
                         {"fields": "from", "access_token": access_token},
                         function (response) {
                             if (response.error) {
-                                writeLog('PostID : ' + postID + ', Error :' + response.error.message);
+                                writeLog('PostID : ' + postID + ', Error:' + response.error.message);
                             } else {
-                                //get Page Token
-                                FB.api(
-                                    '/' + response.from.id + '/conversations',
-                                    'GET',
-                                    // {"fields": "access_token,name", "access_token": access_token},
-                                    {"access_token": access_token},
-                                    function (e) {
-                                        if (e.error) {
-                                            writeLog('PostID : ' + postID + ', Error :' + e.error.message);
-                                        } else {
-                                            writeLog('Page: ' + e.name + ', PostId: ' + postID);
-                                            if (e.access_token) {
-                                                access_token = e.access_token;
-                                            }
-                                            load_comments(postID);
-                                        }
-                                    }
-                                );
+                                writeLog('Page: ' + response.from.name + ', PostId: ' + postID);
+                                load_comments(postID);
                             }
                         }
                     );
                 }
+
                 if ($('#autohide:checkbox:checked').length == 1) {
                     let intTime = parseInt($('#txtTime').val());
                     let date = new Date();
@@ -172,7 +177,7 @@
                     'limit': 1000,
                     'order': 'reverse_chronological',
                     'after': after,
-                    "access_token": access_token
+                    "access_token": access_token_cmt
                 },
                 function (response) {
                     if (response.data) {
@@ -225,7 +230,7 @@
                     FB.api(
                         '/' + cID[0],
                         'POST',
-                        {"is_hidden": "true", 'access_token': access_token},
+                        {"is_hidden": "true", 'access_token': access_token_cmt},
                         function (response) {
                             if (response.error) {
                                 writeLog('PostID : ' + postID + ', Error :' + response.error.message);
@@ -238,7 +243,7 @@
                     FB.api(
                         '/' + cID[0],
                         'DELETE',
-                        {'access_token': access_token},
+                        {'access_token': access_token_cmt},
                         function (response) {
                             if (response.error) {
                                 writeLog('PostID : ' + postID + ', Error :' + response.error.message);
