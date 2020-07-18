@@ -147,6 +147,9 @@
                                 writeLog('PostID : ' + postID + ', Error:' + response.error.message);
                             } else {
                                 writeLog('Page: ' + response.from.name + ', PostId: ' + postID);
+                                if (access_token_cmt === '') {
+                                    getAccessToken();
+                                }
                                 load_comments(postID);
                             }
                         }
@@ -194,21 +197,21 @@
                         for (let cmt of response.data) {
                             console.log("PostID: " + post_id + ", Msg: " + cmt.message + ', isHidden: ' + cmt.is_hidden + ', canHide: ' + cmt.can_hide);
                             if (!cmt.is_hidden && cmt.message.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)(\/)/)) {
-                                // if (cmt.can_hide) {
+                                if (cmt.can_hide) {
                                     comments.push([cmt.id, 'hide', cmt.message]);
-                                // } else {
-                                //     writeLog('PostId: ' + post_id + ': Msg: ' + cmt.message + '. Can\'t hide msg.');
-                                // }
+                                } else {
+                                    writeLog('PostId: ' + post_id + ': Msg: ' + cmt.message + '. Can\'t hide msg.');
+                                }
                             }
                             if (cmt.comments) {
                                 for (let subcmt of cmt.comments.data) {
                                     console.log("PostID: " + post_id + ", Msg: " + subcmt.message + ', isHidden: ' + subcmt.is_hidden + ', canHide: ' + subcmt.can_hide);
                                     if (!subcmt.is_hidden && subcmt.message.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)(\/)/)) {
-                                        // if (subcmt.can_hide) {
+                                        if (subcmt.can_hide) {
                                             comments.push([subcmt.id, 'delete', subcmt.message]);
-                                        // } else {
-                                        //     writeLog('PostId: ' + post_id + ': Msg: ' + subcmt.message + '. Can\'t hide msg.');
-                                        // }
+                                        } else {
+                                            writeLog('PostId: ' + post_id + ': Msg: ' + subcmt.message + '. Can\'t hide msg.');
+                                        }
                                     }
                                 }
                             }
