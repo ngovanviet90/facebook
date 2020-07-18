@@ -129,7 +129,9 @@
                                             writeLog('PostID : ' + postID + ', Error :' + e.error.message);
                                         } else {
                                             writeLog('Page: ' + e.name + ', PostId: ' + postID);
-                                            access_token = e.access_token;
+                                            if (e.access_token) {
+                                                access_token = e.access_token;
+                                            }
                                             load_comments(postID);
                                         }
                                     }
