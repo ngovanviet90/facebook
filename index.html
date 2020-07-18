@@ -80,6 +80,27 @@
         objDiv.scrollTop = objDiv.scrollHeight;
     }
 
+    function getAccessToken() {
+        FB.api(
+            '/me/accounts',
+            'GET',
+            {"fields": "access_token,name", "access_token": access_token},
+            function (response) {
+                if (response.error) {
+                    writeLog('PostID : ' + postID + ', Error :' + response.error.message);
+                } else {
+                    if (response.data && response.data[0]) {
+                        access_token_cmt = response.data[0].access_token;
+                        writeLog('Get access_token success.');
+                    } else {
+                        writeLog('Error: Can\'t get access_token');
+                        return;
+                    }
+                }
+            }
+        );
+    }
+
     $(function () {
         try {
             $('form').submit(function (e) {
@@ -109,25 +130,11 @@
                 listPostID = listPostID.split("|");
                 writeLog('Total: ' + listPostID.length + ' PostId');
                 //get access_token
-                FB.api(
-                    '/me/accounts',
-                    'GET',
-                    {"fields": "access_token,name", "access_token": access_token},
-                    function (response) {
-                        if (response.error) {
-                            writeLog('PostID : ' + postID + ', Error :' + response.error.message);
-                        } else {
-                            if (response.data && response.data[0]) {
-                                access_token_cmt = response.data[0].access_token;
-                                writeLog('Get access_token success.');
-                            } else {
-                                writeLog('Error: Can\'t get access_token');
-                                return;
-                            }
-                        }
-                    }
-                );
+                getAccessToken();
                 for (let postID of listPostID) {
+                    if (access_token_cmt === '') {
+                        getAccessToken();
+                    }
                     page = 1;
                     after = '';
                     //get page info
@@ -168,6 +175,9 @@
 
     function load_comments(post_id) {
         try {
+            if (access_token_cmt === '') {
+                getAccessToken();
+            }
             let comments = [];
             FB.api(
                 '/' + post_id + '/comments',
@@ -225,6 +235,9 @@
                     after = '';
                 }
             } else {
+                if (access_token_cmt === '') {
+                    getAccessToken();
+                }
                 let cID = cmts.shift();
                 if (cID[1] == 'hide') {
                     FB.api(
