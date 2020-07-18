@@ -114,15 +114,14 @@
                     FB.api(
                         '/' + postID,
                         'GET',
-                        {"fields": "", "access_token": access_token},
-                        // {"fields": "from", "access_token": access_token},
+                        {"fields": "from", "access_token": access_token},
                         function (response) {
                             if (response.error) {
                                 writeLog('PostID : ' + postID + ', Error :' + response.error.message);
                             } else {
                                 //get Page Token
                                 FB.api(
-                                    '/' + response.from.id,
+                                    '/' + response.from.id + '/locations',
                                     'GET',
                                     // {"fields": "access_token,name", "access_token": access_token},
                                     {"fields": "", "access_token": access_token},
