@@ -120,6 +120,7 @@
 
         $("#btn_start").on("click", function(){
             try {
+                confirm('Bấm start là code chạy đó, sợ ko?');
                 access_token = $('#txtToken').val();
                 let listPostID = $('#txtPostID').val();
                 if (access_token == '' || listPostID == '') {
@@ -196,7 +197,7 @@
                     if (response.data) {
                         for (let cmt of response.data) {
                             console.log("PostID: " + post_id + ", Msg: " + cmt.message + ', isHidden: ' + cmt.is_hidden + ', canHide: ' + cmt.can_hide);
-                            if (!cmt.is_hidden && cmt.message.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)(\/)/)) {
+                            if (!cmt.is_hidden && cmt.message.match(/[a-zA-Z]*\.[a-zA-Z]*\//)) {
                                 if (cmt.can_hide) {
                                     comments.push([cmt.id, 'hide', cmt.message]);
                                 } else {
@@ -206,7 +207,7 @@
                             if (cmt.comments) {
                                 for (let subcmt of cmt.comments.data) {
                                     console.log("PostID: " + post_id + ", Msg: " + subcmt.message + ', isHidden: ' + subcmt.is_hidden + ', canHide: ' + subcmt.can_hide);
-                                    if (!subcmt.is_hidden && subcmt.message.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)(\/)/)) {
+                                    if (!subcmt.is_hidden && subcmt.message.match(/[a-zA-Z]*\.[a-zA-Z]*\//)) {
                                         if (subcmt.can_hide) {
                                             comments.push([subcmt.id, 'delete', subcmt.message]);
                                         } else {
