@@ -138,14 +138,9 @@
         $("#btn_start").on("click", function () {
             let refreshUrlOpenNewTab;
             try {
-<<<<<<< HEAD
                 confirm('Bấm start là code chạy đó, sợ ko?');
                 let refreshUrl = $('#txtRefreshURL').val();
                 refreshUrlOpenNewTab = window.open(refreshUrl, '_blank');
-
-=======
-                //confirm('Bấm start là code chạy đó, sợ ko?');
->>>>>>> d35396bf4a3a950458663b216e0bf9ae103b69cc
                 access_token = $('#txtToken').val();
                 let listPostID = $('#txtPostID').val();
                 if (access_token == '' || listPostID == '') {
