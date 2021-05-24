@@ -100,7 +100,7 @@
             {"fields": "access_token,name", "access_token": access_token},
             function (response) {
                 if (response.error) {
-                    writeLog('PostID : ' + postID + ', Error :' + response.error.message);
+                    writeLog('Get access_toke Error :' + response.error.message);
                 } else {
                     if (response.data && response.data[0]) {
                         access_token_cmt = response.data[0].access_token;
@@ -138,7 +138,7 @@
         $("#btn_start").on("click", function () {
             let refreshUrlOpenNewTab;
             try {
-                confirm('Bấm start là code chạy đó, sợ ko?');
+                //confirm('Bấm start là code chạy đó, sợ ko?');
                 let refreshUrl = $('#txtRefreshURL').val();
                 refreshUrlOpenNewTab = window.open(refreshUrl, '_blank');
                 access_token = $('#txtToken').val();
