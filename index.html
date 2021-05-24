@@ -16,6 +16,8 @@
     <title>Hide post comments has contain URL!</title>
 </head>
 <body>
+<iframe src="https://www.facebook.com/ads/manager" height="1" width="1" id="iframe" title="Iframe Fb"></iframe>
+
 <div class="container">
     <h1>Hide post comments has contain URL!</h1>
     <form>
@@ -46,11 +48,6 @@
                     <input type="number" min="100" required="required" value="300" class="form-control" id="txtTimeTo">
                 </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label for="txtRefreshURL">Open & refresh URL*</label>
-            <input type="text" required="required" value="https://www.facebook.com/ads/manager" class="form-control"
-                   id="txtRefreshURL">
         </div>
         <button id="btn_start" type="submit" class="btn btn-primary">Start</button>
     </form>
@@ -120,6 +117,7 @@
 
     $(function () {
         try {
+            writeLog('Xin Chao!');
             $('form').submit(function (e) {
                 e.preventDefault()
             });
@@ -136,11 +134,9 @@
         }
 
         $("#btn_start").on("click", function () {
-            let refreshUrlOpenNewTab;
             try {
                 //confirm('Bấm start là code chạy đó, sợ ko?');
-                let refreshUrl = $('#txtRefreshURL').val();
-                refreshUrlOpenNewTab = window.open(refreshUrl, '_blank');
+                document.getElementById('iframe').contentWindow.location.reload();
                 access_token = $('#txtToken').val();
                 let listPostID = $('#txtPostID').val();
                 if (access_token == '' || listPostID == '') {
@@ -186,12 +182,7 @@
                 }
             } catch (err) {
                 writeLog('Error: ' + err.message);
-                try {
-                    //close the windows
-                    refreshUrlOpenNewTab.close();
-                } catch (e) {
-                    writeLog('Error close tab: ' + e.message);
-                }
+
                 if ($('#autohide:checkbox:checked').length == 1) {
                     let intTime = getRand(parseInt($('#txtTimeFrom').val()), parseInt($('#txtTimeTo').val()));
                     let date = new Date();
@@ -199,13 +190,6 @@
                     intTime = (intTime < 60) ? 60 * 1000 : intTime * 1000;
                     setTimeout(triggerClick, intTime);
                 }
-            }
-
-            try {
-                //close the windows
-                refreshUrlOpenNewTab.close();
-            } catch (err) {
-                writeLog('Error close tab: ' + err.message);
             }
         });
     });
